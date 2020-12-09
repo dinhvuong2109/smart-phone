@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.cz/thymeleaf/layout" layout:decorator="~{admin/admin}"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chỉnh sửa SmartPhone</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li><i class="ace-icon fa fa-home home-icon"></i> <a th:href="@{/admin/phone/list?page=1}">Trang
+                chủ</a></li>
+            <li>Chỉnh sửa SmartPhone</li>
+        </ul>
+    </div>
+    <div class="page-content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div th:if="${messageResponse}">
+                    <div class="alert alert-${alert}">
+                        <strong th:text="${messageResponse}"></strong>
+                    </div>
+                </div>
+                <form id="formSubmit" th:object="${phoneModel}" class="form-horizontal" role="form">
+                    <div th:if="${message}">
+                        <div class="alert alert-${alert}" th:text="${message}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Thể loại:</label>
+                        <div class="col-sm-9">
+                            <label>
+                                <select th:field="*{categoryCode}">
+                                    <option th:each="item : ${categories}" th:label="${item.code}" th:value="${item.code}"
+                                            th:selected="${item.code==categoryCode}"></option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <br> <br>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Tên SmartPhone</label>
+                        <div class="col-sm-9">
+                            <label>
+                                <input type="text" th:field="*{name}" th:value="${name}" />
+                            </label>
+                        </div>
+                    </div>
+
+                    <br> <br>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Giá</label>
+                        <div class="col-sm-9">
+                            <label>
+                                <input type="text" th:field="*{price}" th:value="${price}"/>
+                            </label>
+                        </div>
+                    </div>
+                    <br> <br>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Image</label>
+                        <div class="col-sm-9">
+                            <label>
+                                <input type="file" name="file" id="file"/>
+                            </label>
+                        </div>
+                    </div>
+                    <br> <br>
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <div th:if="${phoneModel.id}">
+                                <input type="button" class="btn btn-white"
+                                       th:id="btnAddOrUpdatePhone" value="Cập nhật SmartPhone"/>
+                            </div>
+                            <div th:unless="${phoneModel.id}">
+                                <input type="button" class="btn btn-white"
+                                       th:id="btnAddOrUpdatePhone" value="Thêm mới SmartPhone"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-9">
+                            <input type="reset" value="Reset" class="btn btn-white"/>
+                        </div>
+                    </div>
+                    <input type="hidden" id="id" th:value="${id}" th:field="*{id}"/>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        $('#btnAddOrUpdatePhone').click(function (e) {
+            e.preventDefault();
+            let data = {};
+            let file = $('input[type="file"]').get(0).files[0];
+            let phoneImage = [];
+            if(file) {
+
+                let reader = new FileReader();
+
+                // after the file has loaded on the client,
+                // convert to base64 and assign to the item before POSTing
+                reader.onload = function loaded(evt) {
+                    image.bytes = arrayBufferToBase64(evt.target.result);
+                    image.contentType = file.type;
+
+                    phoneImage.push(image.bytes);
+                    phoneImage.push(image.contentType);
+
+                    // post json object as the request body
+                    // with the technique of your choice
+                    // I like using $.ajax(...)
+                };
+
+                reader.readAsArrayBuffer(file);
+            }
+            data["phoneImage"] =phoneImage;
+            let formData = $('#formSubmit').serializeArray();
+            $.each(formData, function (i, v) {
+                data["" + v.name + ""] = v.value;
+            });
+            let id = $('#id').val();
+            if (id === "") {
+                addPhone(data);
+            } else {
+                updatePhone(data);
+            }
+        });
+
+        function arrayBufferToBase64( arrayBuffer ) {
+            let bytes = new Uint8Array( arrayBuffer );
+            let len = bytes.byteLength;
+            let binary = '';
+            for (let i = 0; i < len; i++) {
+                binary += String.fromCharCode( bytes[ i ] );
+            }
+            return window.btoa( binary );
+        }
+
+        function updatePhone(data) {
+            $.ajax({
+                url: '/api/admin/phone',
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+
+                dataType: 'json',
+                success: function (result) {
+                    window.location.href = "/admin/phone/edit?id=" + result.id + "&message=update_success";
+                },
+                error: function (error) {
+                    window.location.href = "/admin/phone/edit?message=error_system";
+                    console.log(error);
+                },
+            });
+        }
+
+        function addPhone(data) {
+            $.ajax({
+                url: '/api/admin/phone',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+
+                dataType: 'json',
+                success: function (result) {
+                    window.location.href = "/admin/phone/edit?id=" + result.id + "&message=insert_success";
+                },
+                error: function (error) {
+                    window.location.href = "/admin/phone/edit?message=error_system";
+                },
+            });
+        }
+    </script>
+</div>
+</body>
+</html>

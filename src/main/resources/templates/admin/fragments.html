@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymleaf-extras-springsecurity5">
+<th:block th:fragment="html_head">
+    <meta charset="UTF-8">
+<!--    <title>Admin home</title>-->
+    <link rel="stylesheet" th:href="@{/admin/assets/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/admin/font-awesome/4.5.0/css/font-awesome.min.css}"/>
+    <link rel="stylesheet" th:href="@{/admin/assets/css/ace.min.css}"
+          class="ace-main-stylesheet" id="main-ace-style"/>
+    <script th:src="@{/admin/assets/js/ace-extra.min.js}"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type='text/javascript' th:src="@{/admin/js/jquery-2.2.3.min.js}"></script>
+    <script th:src="@{/admin/assets/js/jquery.2.1.1.min.js}"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script th:src="@{/paging/jquery.twbsPagination.js}"></script>
+    <script th:src="@{/ckeditor/ckeditor.js}"></script>
+    <!--sweetalert-->
+    <script th:src="@{/admin/sweetalert2/sweetalert2.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/admin/sweetalert2/sweetalert2.min.css}"/>
+    <title></title>
+</th:block>
+<body>
+<div th:fragment="header" id="navbar" class="navbar navbar-default ace-save-state">
+    <div class="navbar-container ace-save-state" id="navbar-container">
+        <div class="navbar-header pull-left">
+            <a th:href="@{/admin}" class="navbar-brand"> <small> <i
+                    class="fa fa-leaf"></i> Trang quản trị
+            </small>
+            </a>
+        </div>
+        <div class="navbar-buttons navbar-header pull-right collapse navbar-collapse" role="navigation">
+            <ul class="nav ace-nav">
+                <li class="light-blue dropdown-modal">Welcome [[${#httpServletRequest.remoteUser}]]</li>
+<!--                <li sec:authentication="principal.authorities" class="light-blue dropdown-modal"></li>-->
+                <li class="light-blue dropdown-modal">
+                    <a th:href="@{/logout}">
+                        <i class="ace-icon fa fa-power-off"></i>
+                        Thoát
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div th:fragment="menu"
+     id="sidebar" class="sidebar responsive sace-save-state">
+    <script type="text/javascript">
+    </script>
+    <div class="sidebar-shortcuts">
+        <div class="sidebar-shortcuts-large">
+            <button class="btn btn-success">
+                <i class="ace-icon fa fa-signal"></i>
+            </button>
+
+            <button class="btn btn-info">
+                <i class="ace-icon fa fa-pencil"></i>
+            </button>
+
+            <button class="btn btn-warning">
+                <i class="ace-icon fa fa-users"></i>
+            </button>
+
+            <button class="btn btn-danger">
+                <i class="ace-icon fa fa-cogs"></i>
+            </button>
+        </div>
+        <div class="sidebar-shortcuts-mini">
+            <span class="btn btn-success"></span> <span class="btn btn-info"></span>
+
+            <span class="btn btn-warning"></span> <span class="btn btn-danger"></span>
+        </div>
+    </div>
+    <ul class="nav nav-list">
+        <li><a href="#" class="dropdown-toggle">
+            <i class="menu-icon fa fa-list"></i>
+            <span class="menu-text"></span>
+            <strong>Quản lý</strong>
+            <b class="arrow fa fa-angle-down"></b>
+        </a> <b class="arrow"></b>
+            <ul class="submenu">
+                <li>
+                    <a th:href="@{/admin/phone/list?page=1&sortField=id&sortDir=asc}">
+                        <i class="menu-icon fa fa-caret-right"></i> DS SmartPhone
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
+                    <a th:href="@{/admin/category/list?page=1&sortField=id&sortDir=asc}">
+                        <i class="menu-icon fa fa-caret-right"></i> DS thể loại
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
+                    <a th:href="@{/admin/user/list?page=1&sortField=id&sortDir=asc}">
+                        <i class="menu-icon fa fa-caret-right"></i> DS User
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
+                    <a th:href="@{/admin/role/list?page=1&sortField=id&sortDir=asc}">
+                        <i class="menu-icon fa fa-caret-right"></i> DS Role
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <div class="sidebar-toggle sidebar-collapse">
+        <i class="ace-icon fa fa-angle-double-left ace-save-state"
+           data-icon1="ace-icon fa fa-angle-double-left"
+           data-icon2="ace-icon fa fa-angle-double-right"></i>
+    </div>
+</div>
+
+<div th:fragment="footer" class="footer">
+    <div class="footer-inner">
+        <div class="footer-content">
+			<span class="bigger-120"> <span class="blue bolder">Ace</span>
+				Application &copy; 2013-2014
+			</span> &nbsp; &nbsp; <span class="action-buttons"> <a href="#">
+					<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
+			</a> <a href="#"> <i
+                class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+			</a> <a href="#"> <i
+                class="ace-icon fa fa-rss-square orange bigger-150"></i>
+			</a>
+			</span>
+        </div>
+    </div>
+</div>
+<div th:fragment="script">
+    <script th:src="@{/admin/assets/js/bootstrap.min.js}"></script>
+    <script th:src="@{/admin/assets/js/jquery-ui.custom.min.js}"></script>
+    <script th:src="@{/admin/assets/js/jquery.ui.touch-punch.min.js}"></script>
+    <script th:src="@{/admin/assets/js/jquery.easypiechart.min.js}"></script>
+    <script th:src="@{/admin/assets/js/jquery.sparkline.min.js}"></script>
+    <script th:src="@{/admin/assets/js/jquery.flot.min.js}"></script>
+    <script th:src="@{/admin/assets/js/jquery.flot.pie.min.js}"></script>
+    <script th:src="@{/admin/assets/js/jquery.flot.resize.min.js}"></script>
+    <script th:src="@{/admin/assets/js/ace-elements.min.js}"></script>
+    <script th:src="@{/admin/assets/js/ace.min.js}"></script>
+    <script th:src="@{/admin/assets/js/bootstrap.min.js}"></script>
+</div>
+</body>
+</html>

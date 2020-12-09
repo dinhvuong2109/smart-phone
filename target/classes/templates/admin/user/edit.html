@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.cz/thymeleaf/layout" layout:decorator="~{admin/admin}"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li><i class="ace-icon fa fa-home home-icon"></i> <a th:href="@{/admin/user/list?page=1}">Trang
+                chủ User</a></li>
+            <li>Chỉnh sửa User</li>
+        </ul>
+    </div>
+    <div class="page-content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div th:if="${messageResponse}">
+                    <div class="alert alert-${alert}">
+                        <strong th:text="${messageResponse}"></strong>
+                    </div>
+                </div>
+                <form id="formSubmit" th:object="${userModel}" class="form-horizontal" role="form">
+                    <div th:if="${message}">
+                        <div class="alert alert-${alert}" th:text="${message}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">User Name:</label>
+                        <div class="col-sm-9">
+                            <label>
+                                <input type="text" th:field="*{userName}" th:value="${userName}" />
+                            </label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Password:</label>
+                        <div class="col-sm-9">
+                            <label>
+                                <input type="text" th:field="*{password}" th:value="${password}"/>
+                            </label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Full Name:</label>
+                        <div class="col-sm-9">
+                            <label>
+                                <input type="text" th:field="*{fullName}" th:value="${fullName}"/>
+                            </label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Status:</label>
+                        <div class="col-sm-9">
+                            <label>
+                                <input type="text" th:field="*{status}" th:value="${status}"/>
+                            </label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Role:</label>
+                        <div class="col-sm-9">
+                            <table class="center" th:each="item:${roles}" th:field="*{roleCodes}">
+                                <tr th:if="${userModel.id}">
+                                    <label class="pos-rel">
+                                        <input type="checkbox" th:value="${item.code}"  th:checked="${#sets.contains(userModel.roleCodes, item.code)}"
+                                               th:name="roleCodesCheckbox" class="ace"/>
+                                        <span class="lbl">[[${item.code}]]</span>
+                                    </label>
+                                </tr>
+                                <tr th:unless="${userModel.id}">
+                                    <label class="pos-rel">
+                                        <input type="checkbox" th:value="${item.code}" th:name="roleCodesCheckbox" class="ace"/>
+                                        <span class="lbl">[[${item.code}]]</span>
+                                    </label>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Created By:</label>
+                        <div class="col-sm-9">
+                            <label th:text="${createdBy}"></label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Created Date:</label>
+                        <div class="col-sm-9">
+                            <label th:text="${createdDate}"></label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Modified By:</label>
+                        <div class="col-sm-9">
+                            <label th:text="${modifiedBy}"></label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Modified Date:</label>
+                        <div class="col-sm-9">
+                            <label th:text="${modifiedDate}"></label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <div th:if="${userModel.id}">
+                                <input type="button" class="btn btn-white"
+                                       th:id="btnAddOrUpdateUser" value="Cập nhật User"/>
+                            </div>
+                            <div th:unless="${userModel.id}">
+                                <input type="button" class="btn btn-white"
+                                       th:id="btnAddOrUpdateUser" value="Thêm mới User"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-9">
+                            <input type="reset" value="Reset" class="btn btn-white"/>
+                        </div>
+                    </div>
+                    <input type="hidden" id="id" th:value="${id}" th:field="*{id}"/>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        $('#btnAddOrUpdateUser').click(function (e) {
+            e.preventDefault();
+            let data = {};
+            //Add role as array JSON to data
+            let checkboxes = document.getElementsByName('roleCodesCheckbox');
+            let roleCodes=[];
+            for(let i=0, n=checkboxes.length;i<n;i++) {
+                if(checkboxes[i].checked) roleCodes.push($(checkboxes[i]).val());
+            }
+            data["roleCodes"] =roleCodes;
+            //Add another properties to data
+            let formData = $('#formSubmit').serializeArray();
+            $.each(formData, function (i, v) {
+                data["" + v.name + ""] = v.value;
+            });
+            //Check to add user or update user
+            let id = $('#id').val();
+            if (id === "") {
+                addUser(data);
+            } else {
+                updateUser(data);
+            }
+        });
+
+        //Function update user
+        function updateUser(data) {
+            $.ajax({
+                url: '/api/admin/user',
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+
+                dataType: 'json',
+                success: function (result) {
+                    window.location.href = "/admin/user/edit?id=" + result.id + "&message=update_success";
+                },
+                error: function (error) {
+                    window.location.href = "/admin/user/edit?message=error_system";
+                    console.log(error);
+                },
+            });
+        }
+        //Function add user
+        function addUser(data) {
+            $.ajax({
+                url: '/api/admin/user',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+
+                dataType: 'json',
+                success: function (result) {
+                    window.location.href = "/admin/user/edit?id=" + result.id + "&message=insert_success";
+                },
+                error: function (error) {
+                    window.location.href = "/admin/user/edit?message=error_system";
+                },
+            });
+        }
+    </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/web/fragments :: html_head">
+</head>
+<body>
+<!-- header -->
+<div th:replace="/web/fragments :: header"></div>
+<!-- header -->
+<!--body-->
+<div class="container">
+    <div class="row">
+        <div th:replace="/web/fragments :: menu"></div>
+        <div class="col-lg-9">
+            <div th:replace="/web/fragments :: slide"></div>
+            <div class="row">
+                <div th:each="item:${phoneModel}" class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <a href="#"><img class="card-img-top" th:src="@{/images/phone.png}"
+                                         style="height: 100%; width: 100%" alt=""></a>
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <a th:text="${item.name}" href="#"></a>
+                            </h4>
+                            <h5 th:text="${item.price}"></h5>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ul th:replace="/web/fragments :: pagination"></ul>
+</div>
+<!--body-->
+<!-- footer -->
+<div th:replace="/web/fragments :: footer"></div>
+<!-- footer -->
+<div th:replace="/web/fragments :: script"></div>
+</body>
+</html>

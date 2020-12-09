@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.cz/thymeleaf/layout"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Admin Home</title>
+    <th:block th:replace="/admin/fragments :: html_head"></th:block>
+</head>
+<body>
+<div th:replace="/admin/fragments :: header"></div>
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+    <div th:replace="/admin/fragments :: menu"></div>
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div layout:fragment="content"></div>
+        </div>
+    </div>
+
+    <div th:replace="/admin/fragments :: footer" class="text-center"></div>
+    <a href="#" id="btn-scroll-up"
+       class="btn-scroll-up btn btn-sm btn-inverse display"> <i
+            class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+    </a>
+</div>
+<div th:replace="/admin/fragments :: script"></div>
+</body>
+</html>

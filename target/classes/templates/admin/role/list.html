@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.cz/thymeleaf/layout" layout:decorator="~{admin/admin}"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Role</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <form th:action="@{/admin/role/list}" id="formSubmit"
+          method="get">
+        <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+            <ul class="breadcrumb">
+                <li><i class="ace-icon fa fa-home home-icon"></i>
+                    <a th:href="@{/admin/role/list?page=1&sortField=id&sortDir=asc}">Trang chủ Role</a>
+                </li>
+            </ul>
+        </div>
+        <div class="page-content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div th:if="${messageResponse}">
+                                <div class="alert alert-${alert}">
+                                    <strong th:text="${messageResponse}"></strong>
+                                </div>
+                            </div>
+                            <div class="widget-box table-filter">
+                                <div class="table-btn-controls">
+                                    <div class="pull-right tableTools-container">
+                                        <div class="dt-buttons btn-overlap btn-group">
+                                            <a class="dt-button buttons-colvis btn btn-white btn-primary btn-bold"
+                                               data-toggle="tooltip" title='Thêm Role'
+                                               th:href="@{/admin/role/edit}"> <span>
+															<i class="fa fa-plus-circle bigger-110 purple"></i>
+													</span>
+                                            </a>
+                                            <button id="btnDelete" type="button" onclick="waringBeforeDelete()"
+                                                    class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"
+                                                    data-toggle="tooltip" title='Xóa Role'>
+														<span> <i class="fa fa-trash-o bigger-110 pink"></i></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th class="center">
+                                        <label class="pos-rel">
+                                            <input type="checkbox" onClick="toggle(this)" class="ace" />
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </th>
+                                    <th class="text-center">
+                                        <a th:href="@{/admin/role/list(page=${currentPage}, sortField=id, sortDir=${reverseSortDir})}">Id</a>
+                                    </th>
+                                    <th class="text-center">
+                                        <a th:href="@{/admin/role/list(page=${currentPage}, sortField=name, sortDir=${reverseSortDir})}">Role</a>
+                                    </th>
+                                    <th class="text-center">
+                                        <a th:href="@{/admin/role/list(page=${currentPage}, sortField=code, sortDir=${reverseSortDir})}">Code</a>
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="item:${roleModel}">
+                                    <td class="center">
+                                        <label class="pos-rel">
+                                            <input type="checkbox" th:name="checkboxDelete" th:value="${item.id}" class="ace"/>
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </td>
+                                    <td th:text="${item.id}" class="text-center"></td>
+                                    <td th:text="${item.name}" class="text-center"></td>
+                                    <td th:text="${item.code}" class="text-center"></td>
+                                    <td >
+                                        <a class="btn btn-sm btn-primary btn-edit"
+                                           data-toggle="tooltip" title="Cập nhật Role"
+                                           th:href="@{/admin/role/edit(id=${item.id})}">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <ul class="pagination" id="pagination"></ul>
+                            <input type="hidden" id="page" th:name="page">
+                            <input type="hidden" id="sortField" name="sortField" th:value="${sortField}">
+                            <input type="hidden" id="sortDir" name="sortDir" th:value="${sortDir}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+        let totalPages = [[${totalPages}]];
+        let currentPage = [[${currentPage}]];
+        $(function () {
+            window.pagObj = $('#pagination').twbsPagination({
+                totalPages: totalPages,
+                visiblePages: 3,
+                startPage: currentPage,
+                onPageClick: function (event, page) {
+                    if (currentPage !== page) {
+                        // $('#limit').val(2);
+                        $('#page').val(page);
+                        $('#formSubmit').submit();
+                    }
+                }
+            })
+        });
+        function waringBeforeDelete() {
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this imaginary file!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }).then(function (isConfirm) {
+                if (isConfirm) {
+                    let ids = $('tbody input[type=checkbox]:checked').map(function () {
+                        return $(this).val();
+                    }).get();
+                    deleteRole(ids);
+                } else {
+                    swal("Cancelled", "Your imaginary file is safe :)", "error");
+                }
+            });
+        }
+
+        function deleteRole(data) {
+            $.ajax({
+                url: '/api/admin/role',
+                type: 'DELETE',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (result) {
+                    window.location.href = "/admin/role/list?page=1&message=delete_success";
+                },
+                error: function (error) {
+                    window.location.href = "/admin/role/list?page=1&message=error_system";
+                },
+            });
+        }
+
+        function toggle(source) {
+            let checkboxes = document.getElementsByName('checkboxDelete');
+            for(let i=0, n=checkboxes.length;i<n;i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+    </script>
+</div>
+
+
+</body>
+</html>

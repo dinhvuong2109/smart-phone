@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.cz/thymeleaf/layout" layout:decorator="~{admin/admin}"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li><i class="ace-icon fa fa-home home-icon"></i> <a th:href="@{/admin/role/list?page=1}">Trang
+                chủ</a></li>
+            <li>Chỉnh sửa Role</li>
+        </ul>
+    </div>
+    <div class="page-content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div th:if="${messageResponse}">
+                    <div class="alert alert-${alert}">
+                        <strong th:text="${messageResponse}"></strong>
+                    </div>
+                </div>
+                <form id="formSubmit" th:object="${roleModel}" class="form-horizontal" role="form">
+                    <div th:if="${message}">
+                        <div class="alert alert-${alert }" th:text="${message}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Tên Role:</label>
+                        <div class="col-sm-9">
+                            <label>
+                                <input type="text" th:field="*{name}" th:value="${name}"/>
+                            </label>
+                        </div>
+                    </div>
+                    <br> <br>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Code:</label>
+                        <div class="col-sm-9">
+                            <label>
+                                <input type="text" th:field="*{code}" th:value ="${code}" />
+                            </label>
+                        </div>
+                    </div>
+                    <br> <br>
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <div th:if="${roleModel.id}">
+                                <input type="button" class="btn btn-white"
+                                        th:id="btnAddOrUpdateRole" value="Cập nhật Role" />
+                            </div>
+                            <div th:unless="${roleModel.id}">
+                                <input type="button" class="btn btn-white"
+                                       th:id="btnAddOrUpdateRole" value="Thêm mới Role" />
+                            </div>
+                        </div>
+                        <div class="col-sm-9">
+                            <input type="reset" value="Reset" class="btn btn-white"/>
+                        </div>
+                    </div>
+                    <input type="hidden" id="id" th:value="${id}" th:field="*{id}"/>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        $('#btnAddOrUpdateRole').click(function (e) {
+            e.preventDefault();
+            let data = {};
+            let formData = $('#formSubmit').serializeArray();
+            $.each(formData, function (i, v) {
+                data["" + v.name + ""] = v.value;
+            });
+            let id = $('#id').val();
+            if (id === "") {
+                addRole(data);
+            } else {
+                updateRole(data);
+            }
+        });
+        function updateRole(data) {
+            $.ajax({
+                url:'/api/admin/role',
+                type:'PUT',
+                contentType:'application/json',
+                data: JSON.stringify(data),
+
+                dataType:'json',
+                success: function (result) {
+                    window.location.href="/admin/role/edit?id="+result.id+"&message=update_success";
+                },
+                error: function (error) {
+                    window.location.href="/admin/role/edit?message=error_system";
+                    console.log(error);
+                },
+            });
+        }
+        function addRole(data) {
+            $.ajax({
+                url:'/api/admin/role',
+                type:'POST',
+                contentType:'application/json',
+                data: JSON.stringify(data),
+
+                dataType:'json',
+                success: function (result) {
+                    window.location.href="/admin/role/edit?id="+result.id+"&message=insert_success";
+                },
+                error: function (error) {
+                    window.location.href="/admin/role/edit?message=error_system";
+                },
+            });
+        }
+    </script>
+</div>
+</body>
+</html>
