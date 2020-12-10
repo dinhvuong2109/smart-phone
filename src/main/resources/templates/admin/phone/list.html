@@ -149,11 +149,11 @@
                 type: 'DELETE',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
-                success: function (result) {
-                    window.location.href = "/admin/phone/list?page=1&message=delete_success";
+                success: function() {
+                    window.location.href = "/admin/phone/list?page=1&sortField=id&sortDir=asc&message=delete_success";
                 },
-                error: function (error) {
-                    window.location.href = "/admin/phone/list?page=1&message=error_system";
+                error: function() {
+                    window.location.href = "/admin/phone/list?page=1&sortField=id&sortDir=asc&message=error_system";
                 },
             });
         }

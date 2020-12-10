@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController(value = "categoryAPIOfAdmin")
 @RequestMapping("api/admin/category")
 public class CategoryAPI {
+    private final ICategoryService categoryService;
 
     @Autowired
-    ICategoryService categoryService;
+    public CategoryAPI(ICategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
     @PostMapping
     public CategoryDTO createCategory(@RequestBody CategoryDTO categoryDTO) {

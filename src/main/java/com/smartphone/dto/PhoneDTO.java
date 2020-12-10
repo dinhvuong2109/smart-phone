@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 public class PhoneDTO extends AbstractDTO<PhoneDTO> {
     private String name;
-    private Long price;
+    private String price;
     private Long categoryId;
     private String categoryCode;
 }

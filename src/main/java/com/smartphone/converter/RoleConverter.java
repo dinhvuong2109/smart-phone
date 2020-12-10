@@ -18,11 +18,6 @@ public class RoleConverter {
         return result;
     }
 
-    public RoleEntity toEntity(RoleDTO dto) {
-        RoleEntity result = new RoleEntity();
-        return toEntity(result, dto);
-    }
-
     public RoleEntity toEntity(RoleEntity result, RoleDTO dto) {
         result.setName(dto.getName());
         result.setCode(dto.getCode());

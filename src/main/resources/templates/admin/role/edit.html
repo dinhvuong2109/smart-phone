@@ -9,8 +9,10 @@
 <div layout:fragment="content">
     <div class="breadcrumbs ace-save-state" id="breadcrumbs">
         <ul class="breadcrumb">
-            <li><i class="ace-icon fa fa-home home-icon"></i> <a th:href="@{/admin/role/list?page=1}">Trang
-                chủ</a></li>
+            <li><i class="ace-icon fa fa-home home-icon"></i>
+                <a th:href="@{/admin/role/list?page=1&sortField=id&sortDir=asc}">Trang chủ Role</a>
+            </li>
+            </li>
             <li>Chỉnh sửa Role</li>
         </ul>
     </div>
@@ -109,7 +111,7 @@
                 success: function (result) {
                     window.location.href="/admin/role/edit?id="+result.id+"&message=insert_success";
                 },
-                error: function (error) {
+                error: function () {
                     window.location.href="/admin/role/edit?message=error_system";
                 },
             });

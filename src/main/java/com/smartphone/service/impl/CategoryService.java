@@ -41,7 +41,7 @@ public class CategoryService implements ICategoryService {
     @Override
     @Transactional
     public CategoryDTO save(CategoryDTO dto) {
-        CategoryEntity entity = null;
+        CategoryEntity entity = new CategoryEntity();
         if(dto.getId() != null) {
             entity = categoryRepository.findOneById(dto.getId());
         }
@@ -53,6 +53,11 @@ public class CategoryService implements ICategoryService {
     @Override
     public CategoryDTO findById(long id) {
         return categoryConverter.toDto(categoryRepository.findOneById(id));
+    }
+
+    @Override
+    public CategoryDTO findByCode(String code) {
+        return categoryConverter.toDto(categoryRepository.findOneByCode(code));
     }
 
     @Override

@@ -11,7 +11,7 @@
 <div class="container">
 
     <!-- Page Heading -->
-    <h1 class="my-4"> [[${categoryCode}]]
+    <h1 class="my-4"> [[${categoryModel.name}]]
     </h1>
 
     <div class="row">
@@ -23,7 +23,7 @@
                     <h4 class="card-title">
                         <a th:text="${item.name}" href="#"></a>
                     </h4>
-                    <h5 th:text="${item.price}"></h5>
+                    <h5>[[${item.price}]] đ</h5>
                 </div>
             </div>
         </div>

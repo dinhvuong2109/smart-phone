@@ -9,8 +9,9 @@
 <div layout:fragment="content">
     <div class="breadcrumbs ace-save-state" id="breadcrumbs">
         <ul class="breadcrumb">
-            <li><i class="ace-icon fa fa-home home-icon"></i> <a th:href="@{/admin/phone/list?page=1}">Trang
-                chủ</a></li>
+            <li><i class="ace-icon fa fa-home home-icon"></i>
+                <a th:href="@{/admin/phone/list?page=1&sortField=id&sortDir=asc}">Trang chủ SmartPhone</a>
+            </li>
             <li>Chỉnh sửa SmartPhone</li>
         </ul>
     </div>
@@ -57,15 +58,16 @@
                         </div>
                     </div>
                     <br> <br>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label no-padding-right">Image</label>
-                        <div class="col-sm-9">
-                            <label>
-                                <input type="file" name="file" id="file"/>
-                            </label>
-                        </div>
-                    </div>
-                    <br> <br>
+<!--                    Add phone image-->
+<!--                    <div class="form-group">-->
+<!--                        <label class="col-sm-3 control-label no-padding-right">Image</label>-->
+<!--                        <div class="col-sm-9">-->
+<!--                            <label>-->
+<!--                                <input type="file" name="file" id="file"/>-->
+<!--                            </label>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <br> <br>-->
                     <div class="form-group">
                         <div class="col-sm-3">
                             <div th:if="${phoneModel.id}">
@@ -91,29 +93,6 @@
         $('#btnAddOrUpdatePhone').click(function (e) {
             e.preventDefault();
             let data = {};
-            let file = $('input[type="file"]').get(0).files[0];
-            let phoneImage = [];
-            if(file) {
-
-                let reader = new FileReader();
-
-                // after the file has loaded on the client,
-                // convert to base64 and assign to the item before POSTing
-                reader.onload = function loaded(evt) {
-                    image.bytes = arrayBufferToBase64(evt.target.result);
-                    image.contentType = file.type;
-
-                    phoneImage.push(image.bytes);
-                    phoneImage.push(image.contentType);
-
-                    // post json object as the request body
-                    // with the technique of your choice
-                    // I like using $.ajax(...)
-                };
-
-                reader.readAsArrayBuffer(file);
-            }
-            data["phoneImage"] =phoneImage;
             let formData = $('#formSubmit').serializeArray();
             $.each(formData, function (i, v) {
                 data["" + v.name + ""] = v.value;
@@ -125,16 +104,6 @@
                 updatePhone(data);
             }
         });
-
-        function arrayBufferToBase64( arrayBuffer ) {
-            let bytes = new Uint8Array( arrayBuffer );
-            let len = bytes.byteLength;
-            let binary = '';
-            for (let i = 0; i < len; i++) {
-                binary += String.fromCharCode( bytes[ i ] );
-            }
-            return window.btoa( binary );
-        }
 
         function updatePhone(data) {
             $.ajax({
@@ -165,7 +134,7 @@
                 success: function (result) {
                     window.location.href = "/admin/phone/edit?id=" + result.id + "&message=insert_success";
                 },
-                error: function (error) {
+                error: function() {
                     window.location.href = "/admin/phone/edit?message=error_system";
                 },
             });

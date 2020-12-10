@@ -6,6 +6,7 @@ import com.smartphone.entity.RoleEntity;
 import com.smartphone.entity.UserEntity;
 import com.smartphone.utils.SetAuditingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -38,14 +39,9 @@ public class UserConverter {
         return result;
     }
 
-    public UserEntity toEntity(UserDTO dto) {
-        UserEntity result = new UserEntity();
-        return toEntity(result, dto);
-    }
-
     public UserEntity toEntity(UserEntity result, UserDTO dto) {
         result.setUserName(dto.getUserName());
-        result.setPassword(dto.getPassword());
+        result.setPassword(new BCryptPasswordEncoder(10).encode(dto.getPassword()));
         result.setFullName(dto.getFullName());
         result.setStatus(dto.getStatus());
         return result;

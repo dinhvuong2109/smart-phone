@@ -9,8 +9,9 @@
 <div layout:fragment="content">
     <div class="breadcrumbs ace-save-state" id="breadcrumbs">
         <ul class="breadcrumb">
-            <li><i class="ace-icon fa fa-home home-icon"></i> <a th:href="@{/admin/user/list?page=1}">Trang
-                chủ User</a></li>
+            <li><i class="ace-icon fa fa-home home-icon"></i>
+                <a th:href="@{/admin/user/list?page=1&sortField=id&sortDir=asc}">Trang chủ User</a>
+            </li>
             <li>Chỉnh sửa User</li>
         </ul>
     </div>
@@ -80,34 +81,6 @@
                                     </label>
                                 </tr>
                             </table>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label no-padding-right">Created By:</label>
-                        <div class="col-sm-9">
-                            <label th:text="${createdBy}"></label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label no-padding-right">Created Date:</label>
-                        <div class="col-sm-9">
-                            <label th:text="${createdDate}"></label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label no-padding-right">Modified By:</label>
-                        <div class="col-sm-9">
-                            <label th:text="${modifiedBy}"></label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label no-padding-right">Modified Date:</label>
-                        <div class="col-sm-9">
-                            <label th:text="${modifiedDate}"></label>
                         </div>
                     </div>
                     <br>
@@ -187,7 +160,7 @@
                 success: function (result) {
                     window.location.href = "/admin/user/edit?id=" + result.id + "&message=insert_success";
                 },
-                error: function (error) {
+                error: function () {
                     window.location.href = "/admin/user/edit?message=error_system";
                 },
             });

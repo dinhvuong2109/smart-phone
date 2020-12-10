@@ -57,7 +57,7 @@ public class WebController {
         if (page == null) page = 1;
         Pageable pageable = PageRequest.of(page - 1, 6);
         List<PhoneDTO> temp = phoneService.findByCategoryPaginated(categoryCode, pageable);
-        mav.addObject("categoryCode", categoryCode);
+        mav.addObject("categoryModel", categoryService.findByCode(categoryCode));
         mav.addObject("phoneModel", temp);
         //Set parameter to set paging
         PageUtil.showPage(mav, page, phoneService.getTotalItemByCategoryCode(categoryCode), 6);

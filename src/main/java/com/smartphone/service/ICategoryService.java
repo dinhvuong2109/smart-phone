@@ -11,6 +11,7 @@ public interface ICategoryService {
     List<CategoryDTO> findAll();
     CategoryDTO save(CategoryDTO dto);
     CategoryDTO findById(long id);
+    CategoryDTO findByCode(String code);
     int getTotalItem();
     void delete(long[] ids);
 }

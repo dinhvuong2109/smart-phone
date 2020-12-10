@@ -34,7 +34,7 @@
         <div class="navbar-buttons navbar-header pull-right collapse navbar-collapse" role="navigation">
             <ul class="nav ace-nav">
                 <li class="light-blue dropdown-modal">Welcome [[${#httpServletRequest.remoteUser}]]</li>
-<!--                <li sec:authentication="principal.authorities" class="light-blue dropdown-modal"></li>-->
+                <li sec:authentication="principal.authorities" class="light-blue dropdown-modal"></li>
                 <li class="light-blue dropdown-modal">
                     <a th:href="@{/logout}">
                         <i class="ace-icon fa fa-power-off"></i>
